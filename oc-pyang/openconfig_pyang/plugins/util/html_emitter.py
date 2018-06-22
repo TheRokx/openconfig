@@ -153,7 +153,7 @@ class HTMLEmitter(DocEmitter):
       s_div += ht.para(ht.add_tag("span", "description",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['desc'],{"class": "statement-info-text"},level,True)
     s_div += ht.close_tag(newline=True)
 
-    # frinxdoc
+    # frinxdoc (added by ab@frinx)
     if statement.attrs.has_key('frinx-documentation'):
       s_div += ht.para(ht.add_tag("span", "frinx-documentation",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation']['frinx-oc-ni-docs2']['frinx-documentation'],{"class": "statement-info-text"},level,True)
     s_div += ht.close_tag(newline=True)
