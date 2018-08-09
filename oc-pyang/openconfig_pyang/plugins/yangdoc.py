@@ -34,6 +34,7 @@ from pyang import plugin
 from pyang import statements
 from pyang import error
 
+
 def pyang_plugin_init():
     plugin.register_plugin(DocsPlugin())
 
@@ -164,7 +165,7 @@ class StatementDoc:
     # etc.
     self.attrs ={}
 
-    # reference to the top-level type ojbect that stores types
+    # reference to the top-level type object that stores types
     self.typedoc = None
 
     # list of child statements
@@ -220,7 +221,6 @@ def emit_docs(ctx, modules, fd):
   # visit each child element recursively and write its docs
     for child in mod.module.children:
       emit_child (child, emitter, ctx, fd, 1)
-
   # emit docs for all of the current modules
   docs = emitter.emitDocs(ctx)
 
@@ -400,11 +400,29 @@ def collect_child_doc(node, parent, top):
       if child.arg == 'frinx-documentation':
         if 'frinx-documentation' not in statement.attrs:
           statement.attrs['frinx-documentation'] = {}
+
         if child.i_module.i_prefix not in statement.attrs['frinx-documentation']:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix] = {}
-        frinxdoc = child.search_one ((u'frinx-openconfig-docs', u'frinx-documentation'))
-        if frinxdoc is not None:
-          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-documentation'] = frinxdoc.arg
+        frinx_reader = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-reader'))
+        frinx_reader_detail = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-reader-detail'))
+        frinx_writer = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-writer'))
+        frinx_writer_detail = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-writer-detail'))
+        frinx_device_type = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-deviceType'))
+        frinx_device_version = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-deviceVersion'))
+        statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-version'] = frinx_device_version.arg
+        statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-type'] = frinx_device_type.arg
+
+        if frinx_reader is not None:
+          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-reader'] = frinx_reader.arg
+        if frinx_reader_detail is not None:
+          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-reader-detail'] = frinx_reader_detail.arg
+
+        if frinx_writer is not None:
+          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-writer'] = frinx_writer.arg
+        if frinx_writer_detail is not None:
+          #Substitution used here is to make Chunk readable again as it had to be "escaped" in yang model.
+          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-writer-detail'] = re.sub("/%/", "%", frinx_writer_detail.arg)
+
 
       else:
         collect_child_doc (child, statement,top)

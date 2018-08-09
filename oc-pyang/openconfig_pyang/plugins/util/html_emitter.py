@@ -72,7 +72,8 @@ class HTMLEmitter(DocEmitter):
 
       for (typename, td) in mod.typedefs.iteritems():
         types_div += ht.h4(typename,{"class": "module-type-name","id": "type-" + ht.gen_html_id(typename)},2,True)
-        types_div += ht.para(ht.add_tag("span","description:" + ht.br(newline=True), {"class": "module-type-text-label"}) + td.attrs['desc'],{"class": "module-type-text"},2,True)
+        if td.attrs.has_key('desc'):
+          types_div += ht.para(ht.add_tag("span","description:" + ht.br(newline=True), {"class": "module-type-text-label"}) + td.attrs['desc'],{"class": "module-type-text"},2,True)
         types_div += gen_type_info(td.typedoc, 2)
 
         for prop in YangDocDefs.type_leaf_properties:
@@ -146,18 +147,39 @@ class HTMLEmitter(DocEmitter):
     (prefix, last) = yangpath.remove_last(pathstr)
     prefix_name = ht.add_tag("span", prefix + "/", {"class": "statement-path"})
     statement_name = prefix_name + ht.br(level,True) + statement.name
-    s_div += ht.h4(statement_name, {"class": "statement-name","id":statement.attrs['id']},level,True)
+    if statement.attrs.has_key('frinx-documentation'):
+      s_div += ht.h4(statement_name, {"class": "frinx-text-color ","id":statement.attrs['id']},level,True)
+    else:
+      s_div += ht.h4(statement_name, {"class": "statement-name","id":statement.attrs['id']},level,True)
 
     # node description
     if statement.attrs.has_key('desc'):
       s_div += ht.para(ht.add_tag("span", "description",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['desc'],{"class": "statement-info-text"},level,True)
     s_div += ht.close_tag(newline=True)
 
+    ## all FRINX prefixes from units dt@frinx
+    prefixes = ["frinx-oc-ios-docs","frinx-oc-ios-xr-docs", "frinx-oc-ironware-docs","frinx-oc-junos-docs", "frinx-oc-nexus-docs" , "frinx-oc-nos-docs" , "frinx-oc-vrp-docs" ]
+
     # frinxdoc (added by ab@frinx)
     if statement.attrs.has_key('frinx-documentation'):
-      s_div += ht.para(ht.add_tag("span", "frinx-documentation",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation']['frinx-oc-ni-docs2']['frinx-documentation'],{"class": "statement-info-text"},level,True)
-    s_div += ht.close_tag(newline=True)
+      for prefix in prefixes:
 
+        if statement.attrs['frinx-documentation'].has_key(prefix):
+          # s_div = ht.open_tag("div", {"class":"statement-section"}, newline=True)
+          s_div += ht.h4("device " + statement.attrs['frinx-documentation'][prefix]['frinx-docs-type'] + ":",{"class": "frinx-text-color thick frinx-margin-left-medium","id":"ident-" + ht.gen_html_id(prefix)},2,True)
+          s_div += ht.para(ht.add_tag("span", "frinx-device-type",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation'][prefix]['frinx-docs-type'],{"class": "statement-info-text frinx-margin-left-medium"},level,True)
+          s_div += ht.para(ht.add_tag("span", "frinx-supported-versions",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation'][prefix]['frinx-docs-version'],{"class": "statement-info-text frinx-margin-left-medium"},level,True)
+
+          if statement.attrs['frinx-documentation'][prefix].has_key('frinx-docs-reader'):
+            s_div += ht.para(ht.add_tag("span", "frinx-implemented-reader",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation'][prefix]['frinx-docs-reader'],{"class": "statement-info-text frinx-margin-left-medium"},level,True)
+            if statement.attrs['frinx-documentation'][prefix].has_key('frinx-docs-reader-detail'):
+              s_div += ht.para(ht.add_tag("span", "frinx-implemented-reader-details",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation'][prefix]['frinx-docs-reader-detail'],{"class": "statement-info-text frinx-preserve-text frinx-margin-left-big"},level,True)
+          if statement.attrs['frinx-documentation'][prefix].has_key('frinx-docs-writer'):
+            s_div += ht.para(ht.add_tag("span", "frinx-implemented-writer",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation'][prefix]['frinx-docs-writer'],{"class": "statement-info-text frinx-margin-left-medium"},level,True)
+            if statement.attrs['frinx-documentation'][prefix].has_key('frinx-docs-writer-detail'):
+              s_div += ht.para(ht.add_tag("span", "frinx-implemented-writer-details",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['frinx-documentation'][prefix]['frinx-docs-writer-detail'],{"class": "statement-info-text frinx-preserve-text frinx-margin-left-big"},level,True)
+          s_div += ht.close_tag(newline=True)
+        s_div += ht.close_tag(newline=True)
 
     # check for additional properties
     notes = ""
@@ -228,6 +250,15 @@ class HTMLEmitter(DocEmitter):
 
     return s
 
+  # def is_frinx_augmented(self, mod, ctx):
+  #   if ctx.opts.no_structure and statement.keyword in ctx.skip_keywords:
+  #    return False
+  #   for child in mod.module.children:
+  #     if statement.attrs.has_key('frinx-documentation'):
+  #       return True
+  #   return False
+
+
 def gen_type_info(typedoc, level=1):
   """Create and return documentation based on the type.  Expands compound
   types."""
@@ -297,7 +328,10 @@ def gen_nav_tree(emitter, root_mod, level=0):
   nav = "<ul id=\"%s\">\n" % ("tree-" + ht.gen_html_id(root_mod.module_name))
 
   # module link
-  nav += "<li><a class=\"menu-module-name\" href=\"%s\">%s</a></li>\n" % ("#mod-" + ht.gen_html_id(root_mod.module_name), root_mod.module_name)
+  if is_augmented(root_mod.module):
+    nav += "<li><a class=\"menu-module-name, frinx-nav\" href=\"%s\">%s</a></li>\n" % ("#mod-" + ht.gen_html_id(root_mod.module_name), root_mod.module_name)
+  else:
+    nav += "<li><a class=\"menu-module-name\" href=\"%s\">%s</a></li>\n" % ("#mod-" + ht.gen_html_id(root_mod.module_name), root_mod.module_name)
 
   # generate links for types and identities
   if len(root_mod.typedefs) > 0:
@@ -328,7 +362,10 @@ def gen_nav_tree(emitter, root_mod, level=0):
   level = 0
   # nav += "<li><a href=\"%s\">%s</a>\n" % ("#" + ht.gen_html_id(root_mod.module_name) + "-data", "Data elements")
   if len(top.children) > 0:
-    nav += "<li><a href=\"#%s-data\">%s</a>\n" % (root_mod.module_name, "Data elements")
+    if is_augmented(root_mod.module):
+      nav += "<li><a class=\"frinx-nav\" href=\"#%s-data\">%s</a>\n" % (root_mod.module_name, "Data elements")
+    else:
+      nav += "<li><a href=\"#%s-data\">%s</a>\n" % (root_mod.module_name, "Data elements")
     nav += "<ul>\n"
     for child in top.children:
       nav += gen_nav(child, root_mod, level)
@@ -352,7 +389,11 @@ def gen_nav(node, root_mod, level = 0):
   nav = ""
   if len(node.children) > 0:
     # print the current node (opening li element)
-    nav += " "*level + " <li>" + "<a href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
+
+    if is_augmented(node):
+      nav += " "*level + " <li>" + "<a class=\"frinx-nav\" href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
+    else:
+      nav += " "*level + " <li>" + "<a href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
     # start new list for the children
     nav += " "*level + " <ul>\n"
     level += 1
@@ -363,9 +404,14 @@ def gen_nav(node, root_mod, level = 0):
     nav += " "*current_level + "</li>\n"
   else:
     # no children -- just print the current node and return
-    nav += " "*current_level + " <li>" "<a href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
+    if node.attrs.has_key('frinx-documentation'):
+      nav += " "*current_level + " <li>" "<a href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
+    else:
+      nav += " "*current_level + " <li>" "<a href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
 
   return nav
+
+
 
 def text_to_paragraphs(textblock):
   """Simple conversion of text into paragraphs based (naively) on blank
@@ -373,3 +419,15 @@ def text_to_paragraphs(textblock):
 
   paras = textblock.split("\n\n")
   return paras
+
+def is_augmented(node):
+  """Checks if the node tree is augmented by frinx augments for highlighing"""
+
+  if node.attrs.has_key('frinx-documentation'):
+    return True
+
+  if len(node.children) > 0:
+    for child in node.children:
+      if is_augmented(child):
+        return True
+  return False
