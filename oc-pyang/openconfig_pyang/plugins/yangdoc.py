@@ -402,7 +402,7 @@ def collect_child_doc(node, parent, top):
           statement.attrs['frinx-documentation'] = {}
         if child.i_module.i_prefix not in statement.attrs['frinx-documentation']:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix] = {}
-        frinxdoc = child.search_one ('frinx-documentation')
+        frinxdoc = child.search_one ((u'frinx-openconfig-docs', u'frinx-documentation'))
         if frinxdoc is not None:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-documentation'] = frinxdoc.arg
 
