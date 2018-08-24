@@ -252,6 +252,7 @@ def collect_docs(module, ctx):
 
   # get the description text
   description = module.search_one('description')
+  # following if added by ab@frinx
   if description is not None:
     mod.attrs['desc'] = description.arg
   else:
@@ -395,6 +396,7 @@ def collect_child_doc(node, parent, top):
   # collect data from children, i.e., depth-first
   if hasattr(node, 'i_children'):
     for child in node.i_children:
+      # following if added by ab@frinx
       if child.arg == 'frinx-documentation':
         if 'frinx-documentation' not in statement.attrs:
           statement.attrs['frinx-documentation'] = {}
