@@ -403,20 +403,21 @@ def collect_child_doc(node, parent, top):
 
         if child.i_module.i_prefix not in statement.attrs['frinx-documentation']:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix] = {}
-        frinx_reader = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-reader'))
-        frinx_reader_detail = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-reader-detail'))
-        frinx_writer = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-writer'))
-        frinx_writer_detail = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-writer-detail'))
-        frinx_device_type = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-deviceType'))
-        frinx_device_version = child.search_one ((u'frinx-openconfig-docs', u'frinx-docs-deviceVersion'))
-        statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-version'] = frinx_device_version.arg
-        statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-type'] = frinx_device_type.arg
 
+        module_name = child.i_module.i_modulename
+        frinx_device_type = child.search_one(( module_name, u'frinx-docs-device-type' ))
+        frinx_device_version = child.search_one(( module_name, u'frinx-docs-device-version'))
+        frinx_reader = child.search_one((module_name, u'frinx-docs-reader'))
+        frinx_reader_detail = child.search_one((module_name, u'frinx-docs-reader-detail'))
+        frinx_writer = child.search_one((module_name, u'frinx-docs-writer'))
+        frinx_writer_detail = child.search_one((module_name, u'frinx-docs-writer-detail'))
+
+        statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-type'] = frinx_device_type.arg
+        statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-version'] = frinx_device_version.arg
         if frinx_reader is not None:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-reader'] = frinx_reader.arg
         if frinx_reader_detail is not None:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-reader-detail'] = frinx_reader_detail.arg
-
         if frinx_writer is not None:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-writer'] = frinx_writer.arg
         if frinx_writer_detail is not None:

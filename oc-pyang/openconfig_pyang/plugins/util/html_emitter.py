@@ -157,7 +157,7 @@ class HTMLEmitter(DocEmitter):
       s_div += ht.para(ht.add_tag("span", "description",{"class": "statement-info-label"}) + ":<br />" + statement.attrs['desc'],{"class": "statement-info-text"},level,True)
     s_div += ht.close_tag(newline=True)
 
-    ## all FRINX prefixes from units dt@frinx
+    ## all FRINX prefixes from units
     prefixes = ["frinx-oc-ios-docs","frinx-oc-ios-xr-docs", "frinx-oc-ironware-docs","frinx-oc-junos-docs", "frinx-oc-nexus-docs" , "frinx-oc-nos-docs" , "frinx-oc-vrp-docs" ]
 
     # frinxdoc (added by ab@frinx)
