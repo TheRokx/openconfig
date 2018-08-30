@@ -417,12 +417,12 @@ def collect_child_doc(node, parent, top):
         if frinx_reader is not None:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-reader'] = frinx_reader.arg
         if frinx_reader_detail is not None:
-          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-reader-detail'] = frinx_reader_detail.arg
+          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-reader-detail'] = escape_html(frinx_reader_detail.arg)
         if frinx_writer is not None:
           statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-writer'] = frinx_writer.arg
         if frinx_writer_detail is not None:
           #Substitution used here is to make Chunk readable again as it had to be "escaped" in yang model.
-          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-writer-detail'] = re.sub("/%/", "%", frinx_writer_detail.arg)
+          statement.attrs['frinx-documentation'][child.i_module.i_prefix]['frinx-docs-writer-detail'] = escape_html(re.sub("/%/", "%", frinx_writer_detail.arg))
 
 
       else:
@@ -487,6 +487,11 @@ def path_to_id(nodepath):
   path = re.sub(r'\/', r'-', path)
   return path.lower()
 
+def escape_html(str):
+  rstr = re.sub("&", "&amp", str)
+  rstr = re.sub("<", "&lt", rstr)
+  rstr = re.sub(">", "&gt", rstr)
+  return rstr
 
 
 

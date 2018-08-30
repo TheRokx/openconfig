@@ -325,14 +325,21 @@ def gen_nav_tree(emitter, root_mod, level=0):
 
   ht = html_helper.HTMLHelper()
 
+  if len(root_mod.typedefs) <= 0 and len(root_mod.identities) <= 0 and len(root_mod.module.children) <= 0:
+    nav = "<ul id=\"%s\">\n" % ("tree-" + ht.gen_html_id(root_mod.module_name))  
+    nav += "</ul>\n"
+    emitter.moduledocs[root_mod.module_name]['navlist'] = nav
+    emitter.moduledocs[root_mod.module_name]['navid'] = "tree-" + ht.gen_html_id(root_mod.module_name)
+    return
   nav = "<ul id=\"%s\">\n" % ("tree-" + ht.gen_html_id(root_mod.module_name))
 
   # module link
   if is_augmented(root_mod.module):
-    nav += "<li><a class=\"menu-module-name, frinx-nav\" href=\"%s\">%s</a></li>\n" % ("#mod-" + ht.gen_html_id(root_mod.module_name), root_mod.module_name)
+    nav += "<li><a class=\"menu-module-name, frinx-nav\" href=\"%s\">%s</a>\n" % ("#mod-" + ht.gen_html_id(root_mod.module_name), root_mod.module_name)
   else:
-    nav += "<li><a class=\"menu-module-name\" href=\"%s\">%s</a></li>\n" % ("#mod-" + ht.gen_html_id(root_mod.module_name), root_mod.module_name)
+    nav += "<li><a class=\"menu-module-name\" href=\"%s\">%s</a>\n" % ("#mod-" + ht.gen_html_id(root_mod.module_name), root_mod.module_name)
 
+  nav += "<ul>\n"
   # generate links for types and identities
   if len(root_mod.typedefs) > 0:
     nav += "<li><a href=\"%s\">%s</a>\n" % ("#" + ht.gen_html_id(root_mod.module_name) + "-defined-types", "Defined types")
@@ -360,7 +367,6 @@ def gen_nav_tree(emitter, root_mod, level=0):
   # generate links for data nodes
   top = root_mod.module
   level = 0
-  # nav += "<li><a href=\"%s\">%s</a>\n" % ("#" + ht.gen_html_id(root_mod.module_name) + "-data", "Data elements")
   if len(top.children) > 0:
     if is_augmented(root_mod.module):
       nav += "<li><a class=\"frinx-nav\" href=\"#%s-data\">%s</a>\n" % (root_mod.module_name, "Data elements")
@@ -373,6 +379,10 @@ def gen_nav_tree(emitter, root_mod, level=0):
     nav += "</ul>\n"
 
   nav += "</ul>\n"
+  nav += "</ul>\n"
+  nav += "</li>\n"
+
+
 
   # store the navigation list
   emitter.moduledocs[root_mod.module_name]['navlist'] = nav
@@ -405,9 +415,9 @@ def gen_nav(node, root_mod, level = 0):
   else:
     # no children -- just print the current node and return
     if node.attrs.has_key('frinx-documentation'):
-      nav += " "*current_level + " <li>" "<a href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
+      nav += " "*current_level + " <li>" "<a class=\"frinx-nav\" href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
     else:
-      nav += " "*current_level + " <li>" "<a href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
+      nav += " "*current_level + " <li>" "<a class=\"last-child-color\" href=\"#" + node.attrs['id'] + "\">" + node.name + "</a>\n"
 
   return nav
 
