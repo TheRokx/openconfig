@@ -22,8 +22,6 @@ import optparse
 import sys
 import os.path
 import re
-#from collections import OrderedDict
-#from lxml import etree
 import xml
 
 from util.markdown_emitter import MarkdownEmitter
@@ -217,6 +215,8 @@ def emit_docs(ctx, modules, fd):
     emitter = MarkdownEmitter()
   # write top level module and types
   for mod in ctx.mod_docs:
+    if check_for_no_information(mod):
+      continue
     emitter.genModuleDoc(mod, ctx)
   # visit each child element recursively and write its docs
     for child in mod.module.children:
@@ -493,5 +493,10 @@ def escape_html(str):
   rstr = re.sub(">", "&gt", rstr)
   return rstr
 
-
+#Check for frinx augment modules without any information
+def check_for_no_information(mod):
+  if len(mod.typedefs) < 0 and len(mod.identities) < 0 and len(mod.children):
+    return True
+  else:
+    return False
 

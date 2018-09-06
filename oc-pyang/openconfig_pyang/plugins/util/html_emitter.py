@@ -325,8 +325,9 @@ def gen_nav_tree(emitter, root_mod, level=0):
 
   ht = html_helper.HTMLHelper()
 
-  if len(root_mod.typedefs) <= 0 and len(root_mod.identities) <= 0 and len(root_mod.module.children) <= 0:
-    nav = "<ul id=\"%s\">\n" % ("tree-" + ht.gen_html_id(root_mod.module_name))  
+#dont show elements in navigation that has no information for us
+  if len(root_mod.module.children) <= 0:
+    nav = "<ul id=\"%s\">\n" % ("tree-" + ht.gen_html_id(root_mod.module_name))
     nav += "</ul>\n"
     emitter.moduledocs[root_mod.module_name]['navlist'] = nav
     emitter.moduledocs[root_mod.module_name]['navid'] = "tree-" + ht.gen_html_id(root_mod.module_name)
@@ -387,9 +388,6 @@ def gen_nav_tree(emitter, root_mod, level=0):
   # store the navigation list
   emitter.moduledocs[root_mod.module_name]['navlist'] = nav
   emitter.moduledocs[root_mod.module_name]['navid'] = "tree-" + ht.gen_html_id(root_mod.module_name)
-
-  #modtop.nav += "</ul>"
-  # top.nav += "<li>" + statement.name + "</li>\n"
 
 def gen_nav(node, root_mod, level = 0):
   """Add the list item for node (StatementDoc object)"""
