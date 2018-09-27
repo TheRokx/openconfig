@@ -19,10 +19,11 @@ Implements an HTML documentation emitter for YANG modules
 """
 import os
 
+from jinja2 import Environment, FileSystemLoader
+
 import html_helper
 import yangpath
 from doc_emitter import DocEmitter
-from jinja2 import Environment, FileSystemLoader
 from yangdoc_defs import YangDocDefs
 
 
@@ -65,6 +66,9 @@ class HTMLEmitter(DocEmitter):
         self.moduledocs[mod.module_name]['module'] = mod_div
         self.moduledocs[mod.module_name]['data'] = ""
 
+        # handle reference for the use-case @FRINX
+        if mod.module.attrs.has_key('reference'):
+            self.moduledocs[mod.module_name]['reference'] = mod.module.attrs['reference']
         # handle typedefs
         if len(mod.typedefs) > 0:
             types_div = ht.open_tag("div", newline=True)
@@ -130,8 +134,16 @@ class HTMLEmitter(DocEmitter):
 
         # store the identity docs
         self.moduledocs[mod.module_name]['identities'] = idents_div
-
         gen_nav_tree(self, mod, 0)
+
+    def create_links(self, use_cases):
+        ht = html_helper.HTMLHelper()
+        output = ""
+        for use_case in use_cases:
+            url = self.moduledocs[u'frinx-openconfig-uc-' + use_case]['reference']
+            new_link = ht.add_tag("a", use_case, {"href": url})
+            output = output + " | " + new_link
+        return output
 
     def genStatementDoc(self, statement, ctx, level=1):
         """HTML emitter for module data node given a StatementDoc
@@ -224,7 +236,7 @@ class HTMLEmitter(DocEmitter):
         elif statement.attrs.has_key('frinx-usecase'):
             s_div += ht.para(
                 ht.add_tag("span", "related usecases", {"class": "statement-info-label"}) + ": "
-                + create_links(statement.attrs['frinx-usecase']), {"class": "statement-info-text"}, level, True)
+                + self.create_links(statement.attrs['frinx-usecase']), {"class": "statement-info-text"}, level, True)
 
         # check for additional properties
         notes = ""
@@ -486,17 +498,3 @@ def is_augmented(node):
             if is_augmented(child):
                 return True
     return False
-
-def create_links(usecases_list):
-    ht = html_helper.HTMLHelper()
-    output = ""
-
-    for usecase in usecases_list:
-        if usecase == "l3vpn-bgp":
-            new_link = ht.add_tag("a", usecase, {"href":"https://github.com/FRINXio/translation-units-docs/blob/master/Configuration%20datasets/network-instances/l3vpn/network_instance_l3vpn_bgp.md"})
-            output = output + " | " + new_link
-        if usecase == "l2vpn":
-            new_link = ht.add_tag("a", usecase, {
-                "href": "https://github.com/FRINXio/translation-units-docs/blob/master/Configuration%20datasets/network-instances/l3vpn/network_instance_l3vpn_bgp.md"})
-            output = output + " " + new_link
-    return output
