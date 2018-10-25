@@ -81,6 +81,11 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-ospfv3/{{VERSION}}</bundle>
   </feature>
 
+  <feature name="openconfig-evpn" version='${project.version}'>
+    <feature version='${project.version}'>openconfig-network-instance</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-evpn/{{VERSION}}</bundle>
+  </feature>
+
   <feature name='openconfig-platform' version='${project.version}'>
     <feature version='${project.version}'>openconfig-interfaces</feature>
     <bundle>mvn:io.frinx.openconfig/openconfig-platform/{{VERSION}}</bundle>
@@ -165,6 +170,7 @@
     <feature version='${project.version}'>openconfig-logging</feature>
     <feature version='${project.version}'>openconfig-bfd</feature>
     <feature version='${project.version}'>openconfig-ospfv3</feature>
+    <feature version='${project.version}'>openconfig-evpn</feature>
     <feature version='${project.version}'>openconfig-netflow</feature>
     <feature version='${project.version}'>openconfig-qos</feature>
     <feature version='${project.version}'>openconfig-vlan</feature>
