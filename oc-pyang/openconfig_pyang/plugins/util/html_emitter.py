@@ -223,7 +223,7 @@ class HTMLEmitter(DocEmitter):
         # add link for others
         elif statement.attrs.has_key('frinx-usecase'):
             s_div += ht.para(
-                ht.add_tag("span", "used in usecase", {"class": "statement-info-label"}) + ": "
+                ht.add_tag("span", "related usecases", {"class": "statement-info-label"}) + ": "
                 + create_links(statement.attrs['frinx-usecase']), {"class": "statement-info-text"}, level, True)
 
         # check for additional properties
@@ -298,15 +298,6 @@ class HTMLEmitter(DocEmitter):
 
         return s
 
-    # def is_frinx_augmented(self, mod, ctx):
-    #   if ctx.opts.no_structure and statement.keyword in ctx.skip_keywords:
-    #    return False
-    #   for child in mod.module.children:
-    #     if statement.attrs.has_key('frinx-documentation'):
-    #       return True
-    #   return False
-
-
 def gen_type_info(typedoc, level=1):
     """Create and return documentation based on the type.  Expands compound
     types."""
@@ -358,7 +349,7 @@ def gen_type_info(typedoc, level=1):
 def populate_template(title, docs, navs, nav_ids):
     """Populate HTML templates with the documentation content"""
 
-    template_path = os.path.dirname(__file__) + "/../templates"
+    template_path = os.path.dirname(__file__) + "/../templates/yangdoc"
     j2_env = Environment(loader=FileSystemLoader(template_path),
                          trim_blocks=True)
     template = j2_env.get_template('yangdoc.html')
