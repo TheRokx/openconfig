@@ -20,7 +20,6 @@ Extract documentation about elements in YANG data modules.
 
 import optparse
 import re
-import sys
 
 from pyang import error
 from pyang import plugin
@@ -28,6 +27,7 @@ from pyang import statements
 from util import yangpath
 from util.html_emitter import HTMLEmitter
 from util.markdown_emitter import MarkdownEmitter
+from util.device_emitter import DeviceEmitter
 from util.yangdoc_defs import YangDocDefs
 
 
@@ -53,7 +53,7 @@ class DocsPlugin(plugin.PyangPlugin):
                                  action="store",
                                  type="string",
                                  default="markdown",
-                                 help="""Doc output format: markdown, html"""),
+                                 help="""Doc output format: markdown, html, one-device"""),
             optparse.make_option("--strip-ns",
                                  dest="strip_namespace",
                                  action="store_true",
@@ -209,6 +209,8 @@ def emit_docs(ctx, modules, fd):
 
     if ctx.opts.doc_format == "html":
         emitter = HTMLEmitter()
+    elif ctx.opts.doc_format == "one-device":
+        emitter = DeviceEmitter()
     else:
         emitter = MarkdownEmitter()
     # write top level module and types
