@@ -71,7 +71,7 @@ public final class IdsCodeGenerator implements BasicCodeGenerator, BuildContextA
     }
 
     @Override
-    public void setMavenProject(MavenProject project) {
-        this.project = project;
+    public void setMavenProject(MavenProject mavenProject) {
+        this.project = mavenProject;
     }
 }

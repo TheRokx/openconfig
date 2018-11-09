@@ -44,13 +44,15 @@ import org.opendaylight.yangtools.yang.parser.stmt.rfc6020.effective.GroupingEff
 
 final class BindingLookup {
 
+    private BindingLookup() {}
+
     /**
      * Match get, or is prefix for BA getters.
      */
     private static final String GETTER_PREFIX = "[a-z]+";
 
-    static Module findModuleByQname(QName qName, SchemaContext context) {
-        return context.findModuleByNamespaceAndRevision(qName.getNamespace(), qName.getRevision());
+    static Module findModuleByQname(QName qname, SchemaContext context) {
+        return context.findModuleByNamespaceAndRevision(qname.getNamespace(), qname.getRevision());
     }
 
     static SchemaNode findNodeInSchemaCtx(SchemaPath currentPath, SchemaContext context) {
@@ -140,8 +142,8 @@ final class BindingLookup {
         // Provided FQN does not have to be correct, try different FQN as a fallback
         // Usually when the type comes from grouping the fqn might be different than expected
         SchemaPath currentPath = SchemaPath.create(false);
-        for (QName qName : fixedTargetPath.getPathTowardsRoot()) {
-            SchemaPath currentElementPath = SchemaPath.create(false, qName);
+        for (QName qname : fixedTargetPath.getPathTowardsRoot()) {
+            SchemaPath currentElementPath = SchemaPath.create(false, qname);
             currentPath = SchemaPath.create(
                     Iterables.concat(currentElementPath.getPathFromRoot(), currentPath.getPathFromRoot()), false);
 
@@ -155,8 +157,8 @@ final class BindingLookup {
 
         // Another fallback, covers cases where groupings are using groupings from another namespace
         currentPath = SchemaPath.create(false);
-        for (QName qName : fixedTargetPath.getPathTowardsRoot()) {
-            SchemaPath currentElementPath = SchemaPath.create(false, qName);
+        for (QName qname : fixedTargetPath.getPathTowardsRoot()) {
+            SchemaPath currentElementPath = SchemaPath.create(false, qname);
             currentPath = SchemaPath.create(
                     Iterables.concat(currentElementPath.getPathFromRoot(), currentPath.getPathFromRoot()), false);
 
@@ -182,6 +184,12 @@ final class BindingLookup {
         return Optional.empty();
     }
 
+    static Optional<Type> findType(List<Type> types, String fqn) {
+        return types.stream()
+                .filter(a -> a.getFullyQualifiedName().equals(fqn))
+                .findFirst();
+    }
+
     static String getFqn(DataSchemaNode dataSchemaNode, SchemaPath typePath) {
         String className = BindingMapping.getClassName(dataSchemaNode.getQName());
         String rootPackageName = BindingMapping.getRootPackageName(typePath.getLastComponent());
@@ -196,12 +204,6 @@ final class BindingLookup {
 
         String packageName = BindingGeneratorUtil.packageNameForGeneratedType(rootPackageName, typePath);
         return packageName + "." + className;
-    }
-
-    static Optional<Type> findType(List<Type> types, String fqn) {
-        return types.stream()
-                .filter(a -> a.getFullyQualifiedName().equals(fqn))
-                .findFirst();
     }
 
     /**
@@ -233,7 +235,7 @@ final class BindingLookup {
     }
 
     /**
-     * Recursively collect all methods from a generated type (without "get" or "is" prefixes)
+     * Recursively collect all methods from a generated type (without "get" or "is" prefixes).
      */
     private static Set<String> collectMethods(GeneratedType type) {
         Set<String> methods = type.getImplements()
@@ -260,7 +262,7 @@ final class BindingLookup {
     }
 
     /**
-     * Recursively collect all methods from a generated type (without "get" or "is" prefixes)
+     * Recursively collect all methods from a generated type (without "get" or "is" prefixes).
      */
     private static Set<MethodSignature> collectMethodsMeta(GeneratedType type) {
         Set<MethodSignature> methods = type.getImplements()
@@ -280,7 +282,7 @@ final class BindingLookup {
     }
 
     /**
-     * Find generated type that is an augmentation to provided target type
+     * Find generated type that is an augmentation to provided target type.
      */
     private static boolean implementsAugmentationTypes(Type augTargetType, GeneratedType candidateAugType) {
         return candidateAugType.getImplements().stream()
@@ -302,17 +304,18 @@ final class BindingLookup {
     }
 
     /**
-     * Construct type path for an augmentation
+     * Construct type path for an augmentation.
      */
-    static AbstractMap.SimpleEntry<SchemaPath, LinkedHashMap<String, String>> constructParentTypePaths(AugmentationMeta currentAugMeta,
-                                                                                                       SchemaContext context,
-                                                                                                       List<Type> types) {
+    static AbstractMap.SimpleEntry<SchemaPath, LinkedHashMap<String, String>> constructParentTypePaths(
+                    AugmentationMeta currentAugMeta,
+                    SchemaContext context,
+                    List<Type> types) {
 
         SchemaPath currentPath = SchemaPath.ROOT;
 
         LinkedHashMap<String, String> parentClasses = new LinkedHashMap<>();
-        for (QName qName : currentAugMeta.targetPathWithGroupings.getPathFromRoot()) {
-            currentPath = currentPath.createChild(qName);
+        for (QName qname : currentAugMeta.targetPathWithGroupings.getPathFromRoot()) {
+            currentPath = currentPath.createChild(qname);
             SchemaNode node = findNodeInSchemaCtx(currentPath, context);
 
             // Add augment classes to the path
@@ -332,10 +335,15 @@ final class BindingLookup {
                             AugmentationSchema intermediateAugNode = (AugmentationSchema) realParent;
                             AugmentationMeta intermediateAugMeta = extractAugMeta(intermediateAugNode, context, types);
 
-                            DataSchemaNode anyChildOfIntermediateAug = intermediateAugNode.getChildNodes().iterator().next();
-                            Module intermediateModule = findModuleByQname(anyChildOfIntermediateAug.getQName(), context);
-                            Type augPathType = findAugType(types, intermediateAugNode, intermediateAugMeta.targetType, intermediateModule);
-                            parentClasses.put(augPathType.getFullyQualifiedName(), IdsClassTemplate.IID_AUGMENTATION_METHOD);
+                            DataSchemaNode anyChildOfIntermediateAug = intermediateAugNode.getChildNodes().iterator()
+                                    .next();
+                            Module intermediateModule = findModuleByQname(anyChildOfIntermediateAug.getQName(),
+                                    context);
+                            Type augPathType = findAugType(types, intermediateAugNode,
+                                    intermediateAugMeta.targetType,
+                                    intermediateModule);
+                            parentClasses.put(augPathType.getFullyQualifiedName(),
+                                    IdsClassTemplate.IID_AUGMENTATION_METHOD);
                         }
                     }
                 }
@@ -355,8 +363,10 @@ final class BindingLookup {
     }
 
     private static SchemaPath getPathWithResolvedGroupings(AugmentationMeta currentAugMeta, QName parentQName) {
-        int parentIndex = Iterables.indexOf(currentAugMeta.originalTargetPath.getPathFromRoot(), q -> q.equals(parentQName));
-        Iterable<QName> parentPath = Iterables.limit(currentAugMeta.originalTargetPath.getPathFromRoot(), parentIndex + 1);
+        int parentIndex = Iterables.indexOf(currentAugMeta.originalTargetPath.getPathFromRoot(),
+            q -> q.equals(parentQName));
+        Iterable<QName> parentPath = Iterables.limit(currentAugMeta.originalTargetPath.getPathFromRoot(),
+                parentIndex + 1);
         return SchemaPath.create(parentPath, true);
     }
 
@@ -379,14 +389,15 @@ final class BindingLookup {
 
         SchemaPath childPath = SchemaPath.ROOT;
 
-        for (QName qName : targetPath.getPathFromRoot()) {
+        for (QName qname : targetPath.getPathFromRoot()) {
             SchemaPath parentPath = childPath;
-            childPath = childPath.createChild(qName);
+            childPath = childPath.createChild(qname);
             SchemaNode childNode = SchemaContextUtil.findNodeInSchemaContext(context, childPath.getPathFromRoot());
 
-            DataNodeContainer parentNode = parentPath.equals(SchemaPath.ROOT) ?
-                    findModuleByQname(childNode.getQName(), context) :
-                    (DataNodeContainer) SchemaContextUtil.findNodeInSchemaContext(context, parentPath.getPathFromRoot());
+            DataNodeContainer parentNode = parentPath.equals(SchemaPath.ROOT)
+                    ? findModuleByQname(childNode.getQName(), context)
+                    : (DataNodeContainer) SchemaContextUtil
+                    .findNodeInSchemaContext(context, parentPath.getPathFromRoot());
 
             parentNode = switchToAugmentNode(childNode, parentNode);
 
@@ -403,20 +414,26 @@ final class BindingLookup {
     }
 
     /**
-     * If childNode is from an augment, extract that AugmentationSchema from parent
+     * If childNode is from an augment, extract that AugmentationSchema from parent.
      */
     private static DataNodeContainer switchToAugmentNode(SchemaNode childNode, DataNodeContainer parentNode) {
         if (parentNode instanceof AugmentationTarget) {
-            Optional<AugmentationSchema> augParentByUses = ((AugmentationTarget) parentNode).getAvailableAugmentations().stream()
-                    .filter(a -> a.getUses().stream().anyMatch(u -> u.getGroupingPath().getLastComponent().equals(childNode.getQName())))
+            Optional<AugmentationSchema> augParentByUses = ((AugmentationTarget) parentNode)
+                    .getAvailableAugmentations()
+                    .stream()
+                    .filter(a -> a.getUses().stream().anyMatch(u -> u.getGroupingPath().getLastComponent()
+                            .equals(childNode.getQName())))
                     .findFirst();
 
             if (augParentByUses.isPresent()) {
                 return augParentByUses.get();
             }
 
-            Optional<AugmentationSchema> augParent = ((AugmentationTarget) parentNode).getAvailableAugmentations().stream()
-                    .filter(a -> a.getChildNodes().stream().anyMatch(c -> c.getQName().equals(childNode.getQName())))
+            Optional<AugmentationSchema> augParent = ((AugmentationTarget) parentNode)
+                    .getAvailableAugmentations()
+                    .stream()
+                    .filter(a -> a.getChildNodes().stream().anyMatch(c -> c.getQName()
+                            .equals(childNode.getQName())))
                     .findFirst();
 
             if (augParent.isPresent()) {
@@ -432,6 +449,7 @@ final class BindingLookup {
      * definition path.
      * <p>
      * Since types for groupings are generated at their definition place rather than place of use.
+     * </p>
      */
     static void fixTypePathForGroupings(DataNodeContainer parent,
                                         DataSchemaNode dataSchemaNode,
