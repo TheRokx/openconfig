@@ -146,14 +146,20 @@
   </feature>
 
   <feature name='openconfig-configuration-metadata' version='${project.version}'>
-  <feature version='${project.version}'>openconfig-types</feature>
-  <bundle>mvn:io.frinx.openconfig/openconfig-configuration-metadata/{{VERSION}}</bundle>
+    <feature version='${project.version}'>openconfig-types</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-configuration-metadata/{{VERSION}}</bundle>
   </feature>
 
-    <feature name='openconfig-hsrp' version='${project.version}'>
+  <feature name='openconfig-hsrp' version='${project.version}'>
     <feature version='${project.version}'>openconfig-interfaces</feature>
     <feature version='${project.version}'>openconfig-types</feature>
     <bundle>mvn:io.frinx.openconfig/openconfig-hsrp/{{VERSION}}</bundle>
+  </feature>
+
+  <feature name='openconfig-probes' version='${project.version}'>
+    <feature version='${project.version}'>openconfig-types</feature>
+    <feature version='${project.version}'>uniconfig-model</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-probes/{{VERSION}}</bundle>
   </feature>
 
   <feature name='openconfig-models' version='${project.version}' description="All available openconfig models">
@@ -176,6 +182,7 @@
     <feature version='${project.version}'>openconfig-vlan</feature>
     <feature version='${project.version}'>openconfig-if-ip</feature>
     <feature version='${project.version}'>openconfig-hsrp</feature>
+    <feature version='${project.version}'>openconfig-probes</feature>
     <feature version='${project.version}'>openconfig-configuration-metadata</feature>
   </feature>
 
