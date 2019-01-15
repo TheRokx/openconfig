@@ -18,6 +18,7 @@ Implements an HTML documentation emitter for YANG modules
 
 """
 import os
+import re
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -183,16 +184,15 @@ class HTMLEmitter(DocEmitter):
                     'desc'], {"class": "statement-info-text"}, level, True)
         s_div += ht.close_tag(newline=True)
 
-        # all FRINX prefixes from units
-        prefixes = ["frinx-oc-ios-docs", "frinx-oc-ios-xr-docs", "frinx-oc-ironware-docs", "frinx-oc-nos-docs",
-                    "frinx-oc-vrp-docs", "frinx-oc-nexus-docs", "frinx-oc-junos-docs", "frinx-oc-xr-docs"]
 
-        # frinxdoc (added by ab@frinx)
+
         if statement.attrs.has_key('frinx-documentation'):
+
+            prefixes = find_frinx_prefixes(statement.attrs['frinx-documentation'].keys())
             for prefix in prefixes:
 
                 if statement.attrs['frinx-documentation'].has_key(prefix):
-                    if prefix == "frinx-oc-junos-docs" or prefix == "frinx-oc-xr-docs":
+                    if 'frinx-oc-netconf' in prefix:
                         protocol = 'netconf'
                     else:
                         protocol = 'cli'
@@ -498,3 +498,10 @@ def is_augmented(node):
             if is_augmented(child):
                 return True
     return False
+
+
+def find_frinx_prefixes(all_keys):
+    regex = re.compile(r'^frinx-oc-.*-docs$')
+    filtered_prefixes = filter(regex.search, all_keys)
+    filtered_prefixes.sort()
+    return filtered_prefixes
