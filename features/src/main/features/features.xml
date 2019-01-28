@@ -163,6 +163,7 @@
   </feature>
 
   <feature name='openconfig-models' version='${project.version}' description="All available openconfig models">
+    <bundle>mvn:io.frinx.openconfig/openconfig-utils/{{VERSION}}</bundle>
     <feature version='${project.version}'>openconfig-interfaces</feature>
     <feature version='${project.version}'>openconfig-bgp</feature>
     <feature version='${project.version}'>openconfig-network-instance</feature>
