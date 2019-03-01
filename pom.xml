@@ -58,6 +58,7 @@
     <module>hsrp</module>
     <module>probes</module>
     <module>utils</module>
+    <module>isis</module>
 
     <module>features</module>
   </modules>

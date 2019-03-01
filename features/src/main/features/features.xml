@@ -65,6 +65,13 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-mpls/{{VERSION}}</bundle>
   </feature>
 
+  <feature name='openconfig-isis' version='${project.version}'>
+    <feature version='${project.version}'>openconfig-interfaces</feature>
+    <feature version='${project.version}'>openconfig-policy</feature>
+    <feature version='${project.version}'>openconfig-mpls</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-isis/{{VERSION}}</bundle>
+  </feature>
+
   <feature name='openconfig-network-instance' version='${project.version}'>
     <feature version='${project.version}'>openconfig-ospf</feature>
     <feature version='${project.version}'>openconfig-bgp</feature>
@@ -72,6 +79,7 @@
     <feature version='${project.version}'>openconfig-mpls</feature>
     <feature version='${project.version}'>openconfig-policy-forwarding</feature>
     <feature version='${project.version}'>openconfig-vlan</feature>
+    <feature version='${project.version}'>openconfig-isis</feature>
     <bundle>mvn:io.frinx.openconfig/openconfig-network-instance/{{VERSION}}</bundle>
     <bundle>mvn:io.frinx.openconfig/openconfig-local-routing/{{VERSION}}</bundle>
   </feature>
@@ -184,6 +192,7 @@
     <feature version='${project.version}'>openconfig-if-ip</feature>
     <feature version='${project.version}'>openconfig-hsrp</feature>
     <feature version='${project.version}'>openconfig-probes</feature>
+    <feature version='${project.version}'>openconfig-isis</feature>
     <feature version='${project.version}'>openconfig-configuration-metadata</feature>
   </feature>
 

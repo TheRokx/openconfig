@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright © 2017 Frinx and others. All rights reserved.
+  ~ Copyright © 2019 Frinx and others. All rights reserved.
   ~
   ~ This program and the accompanying materials are made available under the
   ~ terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -20,24 +20,14 @@
         <relativePath>../openconfig-parent</relativePath>
     </parent>
 
-    <artifactId>openconfig-network-instance</artifactId>
+    <artifactId>openconfig-isis</artifactId>
     <version>3.1.8.rc3-frinx-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <dependencies>
         <dependency>
             <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-extensions</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-local-routing</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-interfaces</artifactId>
+            <artifactId>openconfig-mpls</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -47,44 +37,23 @@
         </dependency>
         <dependency>
             <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-acl</artifactId>
+            <artifactId>openconfig-extensions</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-bgp</artifactId>
+            <artifactId>openconfig-interfaces</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-ospf</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-vlan</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-mpls</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-policy-forwarding</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.frinx.openconfig</groupId>
-            <artifactId>openconfig-isis</artifactId>
+            <artifactId>openconfig-types</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.mdsal.model</groupId>
             <artifactId>yang-ext</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>
