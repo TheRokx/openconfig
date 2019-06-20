@@ -72,6 +72,11 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-isis/{{VERSION}}</bundle>
   </feature>
 
+  <feature name='openconfig-oam' version='${project.version}'>
+    <feature version='${project.version}'>openconfig-interfaces</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-oam/{{VERSION}}</bundle>
+  </feature>
+
   <feature name='openconfig-network-instance' version='${project.version}'>
     <feature version='${project.version}'>openconfig-ospf</feature>
     <feature version='${project.version}'>openconfig-bgp</feature>
@@ -80,6 +85,7 @@
     <feature version='${project.version}'>openconfig-policy-forwarding</feature>
     <feature version='${project.version}'>openconfig-vlan</feature>
     <feature version='${project.version}'>openconfig-isis</feature>
+    <feature version='${project.version}'>openconfig-oam</feature>
     <bundle>mvn:io.frinx.openconfig/openconfig-network-instance/{{VERSION}}</bundle>
     <bundle>mvn:io.frinx.openconfig/openconfig-local-routing/{{VERSION}}</bundle>
   </feature>
