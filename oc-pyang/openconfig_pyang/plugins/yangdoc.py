@@ -79,7 +79,6 @@ class DocsPlugin(plugin.PyangPlugin):
         modulenames = [m.arg for m in modules]
         if not ctx.opts.ignore_errors:
             for (epos, etag, eargs) in ctx.errors:
-                print(epos)
                 if (epos.top.arg in modulenames and
                         error.is_error(error.err_level(etag))):
                     raise error.EmitError("%s contains errors" % epos.top.arg)
@@ -469,7 +468,8 @@ def collect_type_docs(typest, typedoc):
         for enum in enums:
             enumdesc = enum.search_one('description')
             # generally expect a description substatement, but it might be None
-            typedoc.attrs['enums'][enum.arg] = enumdesc.arg
+            if enumdesc is not None:
+                typedoc.attrs['enums'][enum.arg] = enumdesc.arg
     elif typest.arg == 'leafref':
         ref_path = typest.search_one('path')
         typedoc.attrs['leafref_path'] = yangpath.strip_namespace(ref_path.arg)
