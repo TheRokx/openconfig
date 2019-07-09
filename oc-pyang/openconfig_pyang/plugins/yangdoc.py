@@ -29,6 +29,7 @@ from util import yangpath
 from util.usecase_emitter import UsecaseEmitter
 from util.device_emitter import DeviceEmitter
 from util.html_emitter import HTMLEmitter
+from util.rst_emitter import RSTEmitter
 from util.markdown_emitter import MarkdownEmitter
 from util.yangdoc_defs import YangDocDefs
 
@@ -78,6 +79,7 @@ class DocsPlugin(plugin.PyangPlugin):
         modulenames = [m.arg for m in modules]
         if not ctx.opts.ignore_errors:
             for (epos, etag, eargs) in ctx.errors:
+                print(epos)
                 if (epos.top.arg in modulenames and
                         error.is_error(error.err_level(etag))):
                     raise error.EmitError("%s contains errors" % epos.top.arg)
@@ -211,6 +213,8 @@ def emit_docs(ctx, modules, fd):
 
     if ctx.opts.doc_format == "html":
         emitter = HTMLEmitter()
+    elif ctx.opts.doc_format == "rst":
+        emitter = RSTEmitter()
     elif ctx.opts.doc_format == "one-device":
         emitter = DeviceEmitter()
     elif ctx.opts.doc_format == "usecase":
