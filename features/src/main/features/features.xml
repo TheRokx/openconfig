@@ -137,6 +137,12 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-snmp/{{VERSION}}</bundle>
   </feature>
 
+  <feature name='openconfig-stp' version='${project.version}'>
+    <feature version='${project.version}'>openconfig-interfaces</feature>
+    <feature version='${project.version}'>openconfig-lldp</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-stp/{{VERSION}}</bundle>
+  </feature>
+
   <feature name='openconfig-logging' version='${project.version}'>
     <feature version='${project.version}'>openconfig-interfaces</feature>
     <bundle>mvn:io.frinx.openconfig/openconfig-logging/{{VERSION}}</bundle>
@@ -204,6 +210,7 @@
     <feature version='${project.version}'>openconfig-hsrp</feature>
     <feature version='${project.version}'>openconfig-probes</feature>
     <feature version='${project.version}'>openconfig-isis</feature>
+    <feature version='${project.version}'>openconfig-stp</feature>
     <feature version='${project.version}'>openconfig-ipsec</feature>
     <feature version='${project.version}'>openconfig-configuration-metadata</feature>
   </feature>
