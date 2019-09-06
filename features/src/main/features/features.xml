@@ -176,6 +176,11 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-probes/{{VERSION}}</bundle>
   </feature>
 
+  <feature name='openconfig-ipsec' version='${project.version}'>
+    <feature version='${project.version}'>uniconfig-model</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-ipsec/{{VERSION}}</bundle>
+  </feature>
+
   <feature name='openconfig-models' version='${project.version}' description="All available openconfig models">
     <bundle>mvn:io.frinx.openconfig/openconfig-utils/{{VERSION}}</bundle>
     <feature version='${project.version}'>openconfig-interfaces</feature>
@@ -199,6 +204,7 @@
     <feature version='${project.version}'>openconfig-hsrp</feature>
     <feature version='${project.version}'>openconfig-probes</feature>
     <feature version='${project.version}'>openconfig-isis</feature>
+    <feature version='${project.version}'>openconfig-ipsec</feature>
     <feature version='${project.version}'>openconfig-configuration-metadata</feature>
   </feature>
 

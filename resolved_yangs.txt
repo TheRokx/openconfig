@@ -146,3 +146,4 @@
 ./oam/src/main/yang/frinx-oam-types.yang
 ./oam/src/main/yang/frinx-oam.yang
 
+./ipsec/src/main/yang/frinx-ipsec.yang

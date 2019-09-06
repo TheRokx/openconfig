@@ -60,6 +60,7 @@
     <module>utils</module>
     <module>isis</module>
     <module>oam</module>
+    <module>ipsec</module>
 
     <module>features</module>
   </modules>
