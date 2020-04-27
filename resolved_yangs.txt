@@ -150,3 +150,5 @@
 
 ./ipsec/src/main/yang/frinx-ipsec.yang
 ./stp/src/main/yang/frinx-stp.yang
+
+./l2-cft/src/main/yang/frinx-openconfig-l2-cft.yang

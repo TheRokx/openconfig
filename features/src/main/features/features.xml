@@ -182,6 +182,11 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-probes/{{VERSION}}</bundle>
   </feature>
 
+  <feature name='openconfig-l2-cft' version='${project.version}'>
+    <feature version='${project.version}'>openconfig-platform</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-l2-cft/{{VERSION}}</bundle>
+  </feature>
+
   <feature name='openconfig-ipsec' version='${project.version}'>
     <feature version='${project.version}'>uniconfig-model</feature>
     <bundle>mvn:io.frinx.openconfig/openconfig-ipsec/{{VERSION}}</bundle>
@@ -213,6 +218,7 @@
     <feature version='${project.version}'>openconfig-stp</feature>
     <feature version='${project.version}'>openconfig-ipsec</feature>
     <feature version='${project.version}'>openconfig-configuration-metadata</feature>
+    <feature version='${project.version}'>openconfig-l2-cft</feature>
   </feature>
 
 </features>
