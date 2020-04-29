@@ -152,3 +152,4 @@
 ./stp/src/main/yang/frinx-stp.yang
 
 ./l2-cft/src/main/yang/frinx-openconfig-l2-cft.yang
+./l2-cft/src/main/yang/frinx-openconfig-broadcast-containment.yang

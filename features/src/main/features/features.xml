@@ -192,6 +192,12 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-ipsec/{{VERSION}}</bundle>
   </feature>
 
+  <feature name='openconfig-broadcast-containment' version='${project.version}'>
+    <feature version='${project.version}'>openconfig-platform</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-broadcast-containment/{{VERSION}}</bundle>
+  </feature>
+
+
   <feature name='openconfig-models' version='${project.version}' description="All available openconfig models">
     <bundle>mvn:io.frinx.openconfig/openconfig-utils/{{VERSION}}</bundle>
     <feature version='${project.version}'>openconfig-interfaces</feature>
@@ -219,6 +225,7 @@
     <feature version='${project.version}'>openconfig-ipsec</feature>
     <feature version='${project.version}'>openconfig-configuration-metadata</feature>
     <feature version='${project.version}'>openconfig-l2-cft</feature>
+    <feature version='${project.version}'>openconfig-broadcast-containment</feature>
   </feature>
 
 </features>
