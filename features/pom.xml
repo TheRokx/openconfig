@@ -206,5 +206,10 @@
       <artifactId>openconfig-utils</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>io.frinx.openconfig</groupId>
+      <artifactId>openconfig-l2-cft</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
