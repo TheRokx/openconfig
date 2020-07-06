@@ -197,6 +197,10 @@
     <bundle>mvn:io.frinx.openconfig/openconfig-broadcast-containment/{{VERSION}}</bundle>
   </feature>
 
+  <feature name='openconfig-ring' version='${project.version}'>
+    <feature version='${project.version}'>openconfig-platform</feature>
+    <bundle>mvn:io.frinx.openconfig/openconfig-ring/{{VERSION}}</bundle>
+  </feature>
 
   <feature name='openconfig-models' version='${project.version}' description="All available openconfig models">
     <bundle>mvn:io.frinx.openconfig/openconfig-utils/{{VERSION}}</bundle>
@@ -226,6 +230,7 @@
     <feature version='${project.version}'>openconfig-configuration-metadata</feature>
     <feature version='${project.version}'>openconfig-l2-cft</feature>
     <feature version='${project.version}'>openconfig-broadcast-containment</feature>
+    <feature version='${project.version}'>openconfig-ring</feature>
   </feature>
 
 </features>

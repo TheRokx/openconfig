@@ -10,7 +10,6 @@ module frinx-openconfig-ring {
   // uniconfig imports
   import network-topology { prefix nt; revision-date "2013-10-21"; }
   import frinx-uniconfig-topology { prefix ut; revision-date "2017-11-21"; }
-  import frinx-openconfig-network-instance { prefix oc-ni; }
   import yang-ext { prefix ext; revision-date "2013-07-09"; }
 
   // meta
@@ -25,7 +24,7 @@ module frinx-openconfig-ring {
   revision "2020-06-22" {
     description
       "Initial release";
-    reference "4.2.5";
+    reference "3.1.14";
   }
 
   // grouping statements
